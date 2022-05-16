@@ -1,12 +1,12 @@
 -- inner join
 
--- 예제1: 현재 근무하고 직원의 이름과 직책을 출력하세요.
+-- 예제 1: 현재 근무하고 직원의 이름과 직책을 출력하세요.
 select a.first_name, b.title
 	from employees as a, titles as b 
     where a.emp_no = b.emp_no		-- join 조건(n-1)
 	and b.to_date = '9999-01-01';	-- row 선택 조건
     
--- 예제2: 현재 직원의 이름과 직책을 출력하되 여성 엔지니어(engineer)만 출력하세요.
+-- 예제 2: 현재 직원의 이름과 직책을 출력하되 여성 엔지니어(engineer)만 출력하세요.
 select a.first_name, a.gender, b.title
 	from employees as a, titles as b 
     where a.emp_no = b.emp_no		-- join 조건(n-1)
@@ -55,7 +55,7 @@ select a.emp_no, concat(a.first_name, ' ', a.last_name) as 'name', b.salary
     and b.to_date = '9999-01-01'
     order by b.salary desc;
     
--- 실습문제3: 현재 직책별로 평균 연봉과 인원수를 구하되 직책별로 인원이 100명 이상인 직책만 출력하세요.
+-- 실습문제 3: 현재 직책별로 평균 연봉과 인원수를 구하되 직책별로 인원이 100명 이상인 직책만 출력하세요.
 select a.title, avg(b.salary), count(*)
 	from titles a, salaries b
     where a.emp_no = b.emp_no
@@ -65,7 +65,7 @@ select a.title, avg(b.salary), count(*)
     having count(*) >= 100
     order by avg(b.salary) desc;
     
--- 실습문제4: 현재 부서별로 현재 직책이 Engineer인 직원들의 대해서만 평균 급여를 구하세요.
+-- 실습문제 4: 현재 부서별로 현재 직책이 Engineer인 직원들의 대해서만 평균 급여를 구하세요.
 select d.dept_name, avg(b.salary)
 	from dept_emp a, salaries b, titles c, departments d
     where a.emp_no = b.emp_no
