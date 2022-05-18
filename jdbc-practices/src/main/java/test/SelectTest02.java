@@ -11,14 +11,14 @@ import java.util.List;
 public class SelectTest02 {
 
 	public static void main(String[] args) {
-		List<DepartmentVO> result = findAll();
-		for (DepartmentVO vo : result) {
+		List<DepartmentVo> result = findAll();
+		for (DepartmentVo vo : result) {
 			System.out.println(vo);
 		}
 	}
 
-	private static List<DepartmentVO> findAll() {
-		List<DepartmentVO> result = new ArrayList<DepartmentVO>();
+	private static List<DepartmentVo> findAll() {
+		List<DepartmentVo> result = new ArrayList<DepartmentVo>();
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -44,7 +44,7 @@ public class SelectTest02 {
 				Long no = rs.getLong(1);
 				String name = rs.getString(2);
 
-				DepartmentVO vo = new DepartmentVO();
+				DepartmentVo vo = new DepartmentVo();
 				vo.setNo(no);
 				vo.setName(name);
 

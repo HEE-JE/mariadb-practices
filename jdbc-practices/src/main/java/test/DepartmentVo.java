@@ -1,6 +1,6 @@
 package test;
 
-public class DepartmentVO {
+public class DepartmentVo {
 	private Long no;
 	private String name;
 

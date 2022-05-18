@@ -8,14 +8,14 @@ import java.sql.SQLException;
 public class UpdateTest02 {
 	public static void main(String[] args) {
 		// update(4L, "전략기획팀");
-		DepartmentVO vo = new DepartmentVO();
+		DepartmentVo vo = new DepartmentVo();
 		vo.setNo(7L);
 		vo.setName("기반팀");
 
 		update(vo);
 	}
 
-	public static boolean update(DepartmentVO vo) {
+	public static boolean update(DepartmentVo vo) {
 		boolean result = false;
 		Connection connection = null;
 		PreparedStatement pstmt = null;
