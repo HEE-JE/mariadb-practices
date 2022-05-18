@@ -19,4 +19,9 @@ public class DepartmentVO {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public String toString() {
+		return "DepartmentVO [no=" + no + ", name=" + name + "]";
+	}
 }
