@@ -16,13 +16,13 @@ public class CartDaoTest {
 		CartDao dao = new CartDao();
 		CartVo vo = new CartVo();
 
-		vo.setBookNo(1L);
 		vo.setMemberNo(1L);
+		vo.setBookNo(1L);
 		vo.setCount(2);
 		dao.insert(vo);
 
-		vo.setBookNo(3L);
 		vo.setMemberNo(1L);
+		vo.setBookNo(3L);
 		vo.setCount(1);
 		dao.insert(vo);
 	}

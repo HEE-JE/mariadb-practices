@@ -23,8 +23,8 @@ public class CartDao {
 			pstmt = connection.prepareStatement(sql);
 
 			// 4. Mapping(bind)
-			pstmt.setLong(1, vo.getBookNo());
-			pstmt.setLong(2, vo.getMemberNo());
+			pstmt.setLong(1, vo.getMemberNo());
+			pstmt.setLong(2, vo.getBookNo());
 			pstmt.setInt(3, vo.getCount());
 
 			// 5. SQL 실행
