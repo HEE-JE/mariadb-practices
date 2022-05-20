@@ -3,12 +3,12 @@ package vo;
 public class OrderVo {
 	private Long no;
 	private String date;
-	private int price;
 	private String receive;
 	private Long memberNo;
 
 	private String dateNo;
 	private String nameEmail;
+	private int totalPrice;
 
 	public Long getNo() {
 		return no;
@@ -58,16 +58,17 @@ public class OrderVo {
 		this.nameEmail = nameEmail;
 	}
 
-	public int getPrice() {
-		return price;
+	public int getTotalPrice() {
+		return totalPrice;
 	}
 
-	public void setPrice(int price) {
-		this.price = price;
+	public void setTotalPrice(int totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 
 	@Override
 	public String toString() {
-		return "[dateNo=" + dateNo + ", nameEmail=" + nameEmail + ", price=" + price + ", receive=" + receive + "]";
+		return "[dateNo=" + dateNo + ", nameEmail=" + nameEmail + ", totalPrice=" + totalPrice + ", receive=" + receive
+				+ "]";
 	}
 }

@@ -1,5 +1,6 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.BookDao;
@@ -17,7 +18,12 @@ import vo.OrderVo;
 public class BookMall {
 
 	public static void main(String[] args) {
-		insertAll();
+		insertCategory(); // 카테고리 등록
+		insertBook(); // 책 정보 등록
+		insertMember(); // 회원가입
+		insertCart(); // 장바구니
+		insertOrder(); // 구매하기
+
 		findAll();
 	}
 
@@ -57,15 +63,6 @@ public class BookMall {
 		for (OrderBookVo vo : orderBookList) {
 			System.out.println(vo);
 		}
-	}
-
-	private static void insertAll() {
-		insertCategory();
-		insertBook();
-		insertMember();
-		insertCart();
-		insertOrder();
-		insertOrderBook();
 	}
 
 	private static void insertCategory() {
@@ -137,25 +134,25 @@ public class BookMall {
 	private static void insertOrder() {
 		OrderDao dao = new OrderDao();
 		OrderVo vo = new OrderVo();
+		OrderBookVo odvo = new OrderBookVo();
+		List<OrderBookVo> list = new ArrayList<OrderBookVo>();
 
-		vo.setPrice(69000);
 		vo.setReceive("센텀시티");
 		vo.setMemberNo(1L);
-		dao.insertOrder(vo);
-	}
 
-	private static void insertOrderBook() {
-		OrderDao dao = new OrderDao();
-		OrderBookVo vo = new OrderBookVo();
+		odvo.setOrderNo(1L);
+		odvo.setBookNo(1L);
+		odvo.setPrice(54000);
+		odvo.setCount(2);
+		list.add(odvo);
+		odvo = new OrderBookVo();
 
-		vo.setOrderNo(1L);
-		vo.setBookNo(1L);
-		vo.setCount(2);
-		dao.insertOrderBook(vo);
+		odvo.setOrderNo(1L);
+		odvo.setBookNo(3L);
+		odvo.setPrice(10000);
+		odvo.setCount(1);
+		list.add(odvo);
 
-		vo.setOrderNo(1L);
-		vo.setBookNo(3L);
-		vo.setCount(1);
-		dao.insertOrderBook(vo);
+		dao.insertOrder(vo, list);
 	}
 }

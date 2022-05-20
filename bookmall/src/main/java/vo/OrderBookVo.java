@@ -3,10 +3,10 @@ package vo;
 public class OrderBookVo {
 	private Long orderNo;
 	private Long bookNo;
+	private int price;
 	private int count;
 
 	private String title;
-	private int totalPrice;
 
 	public Long getOrderNo() {
 		return orderNo;
@@ -40,16 +40,16 @@ public class OrderBookVo {
 		this.title = title;
 	}
 
-	public int getTotalPrice() {
-		return totalPrice;
+	public int getPrice() {
+		return price;
 	}
 
-	public void setTotalPrice(int totalPrice) {
-		this.totalPrice = totalPrice;
+	public void setPrice(int price) {
+		this.price = price;
 	}
 
 	@Override
 	public String toString() {
-		return "[bookNo=" + bookNo + ", title=" + title + "count=" + count + ", totalPrice=" + totalPrice + "]";
+		return "[bookNo=" + bookNo + ", title=" + title + ", count=" + count + ", price=" + price + "]";
 	}
 }

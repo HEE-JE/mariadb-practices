@@ -12,7 +12,7 @@ import vo.OrderBookVo;
 import vo.OrderVo;
 
 public class OrderDao {
-	public boolean insertOrder(OrderVo vo) {
+	public boolean insertOrder(OrderVo vo, List<OrderBookVo> list) {
 		boolean result = false;
 		Connection connection = null;
 		PreparedStatement pstmt = null;
@@ -20,17 +20,18 @@ public class OrderDao {
 			connection = getConnection();
 
 			// 3. SQL 준비
-			String sql = "insert into `order`(no, price, receive, member_no) values(null, ?, ?, ?)";
+			String sql = "insert into `order`(no, receive, member_no) values(null, ?, ?)";
 			pstmt = connection.prepareStatement(sql);
 
 			// 4. Mapping(bind)
-			pstmt.setInt(1, vo.getPrice());
-			pstmt.setString(2, vo.getReceive());
-			pstmt.setLong(3, vo.getMemberNo());
+			pstmt.setString(1, vo.getReceive());
+			pstmt.setLong(2, vo.getMemberNo());
 
 			// 5. SQL 실행
 			int count = pstmt.executeUpdate();
 			result = count == 1;
+
+			insertOrderBook(list);
 
 		} catch (SQLException e) {
 			System.out.println("드라이버 로딩 실패:" + e);
@@ -49,38 +50,42 @@ public class OrderDao {
 		return result;
 	}
 
-	public boolean insertOrderBook(OrderBookVo vo) {
+	private boolean insertOrderBook(List<OrderBookVo> list) {
 		boolean result = false;
-		Connection connection = null;
-		PreparedStatement pstmt = null;
-		try {
-			connection = getConnection();
-
-			// 3. SQL 준비
-			String sql = "insert into order_book values(?, ?, ?)";
-			pstmt = connection.prepareStatement(sql);
-
-			// 4. Mapping(bind)
-			pstmt.setLong(1, vo.getOrderNo());
-			pstmt.setLong(2, vo.getBookNo());
-			pstmt.setInt(3, vo.getCount());
-
-			// 5. SQL 실행
-			int count = pstmt.executeUpdate();
-			result = count == 1;
-
-		} catch (SQLException e) {
-			System.out.println("드라이버 로딩 실패:" + e);
-		} finally {
+		for (OrderBookVo vo : list) {
+			result = false;
+			Connection connection = null;
+			PreparedStatement pstmt = null;
 			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
+				connection = getConnection();
+
+				// 3. SQL 준비
+				String sql = "insert into order_book values(?, ?, ?, ?)";
+				pstmt = connection.prepareStatement(sql);
+
+				// 4. Mapping(bind)
+				pstmt.setLong(1, vo.getOrderNo());
+				pstmt.setLong(2, vo.getBookNo());
+				pstmt.setInt(3, vo.getPrice());
+				pstmt.setInt(4, vo.getCount());
+
+				// 5. SQL 실행
+				int count = pstmt.executeUpdate();
+				result = count == 1;
+
 			} catch (SQLException e) {
-				e.printStackTrace();
+				System.out.println("드라이버 로딩 실패:" + e);
+			} finally {
+				try {
+					if (pstmt != null) {
+						pstmt.close();
+					}
+					if (connection != null) {
+						connection.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return result;
@@ -95,8 +100,9 @@ public class OrderDao {
 			connection = getConnection();
 
 			// 3. SQL 준비
-			String sql = "select concat(date_format(a.date, '%Y%m%d'), '-', a.no) as date_no, concat(b.name, '(', b.email, ')') as name_email, a.price, a.receive"
-					+ "	from `order` a, member b" + "    where a.member_no = b.no" + "	order by date_no";
+			String sql = "select concat(date_format(a.date, '%Y%m%d'), '-', a.no) as date_no, concat(c.name, '(', c.email, ')') as name_email, sum(b.price), a.receive"
+					+ "	from `order` a, order_book b, member c" + "    where a.no = b.order_no"
+					+ "    and a.member_no = c.no" + "    group by a.no";
 			pstmt = connection.prepareStatement(sql);
 
 			// 4. Parameter Mapping
@@ -109,7 +115,7 @@ public class OrderDao {
 				OrderVo vo = new OrderVo();
 				vo.setDateNo(rs.getString(1));
 				vo.setNameEmail(rs.getString(2));
-				vo.setPrice(rs.getInt(3));
+				vo.setTotalPrice(rs.getInt(3));
 				vo.setReceive(rs.getString(4));
 
 				result.add(vo);
@@ -144,9 +150,8 @@ public class OrderDao {
 			connection = getConnection();
 
 			// 3. SQL 준비
-			String sql = "select a.book_no, c.title, a.count, c.price * a.count"
-					+ "	from order_book a, `order` b, book c" + "    where a.order_no = b.no"
-					+ "    and a.book_no = c.no";
+			String sql = "select a.book_no, c.title, a.count, a.price" + "	from order_book a, `order` b, book c"
+					+ "    where a.order_no = b.no" + "	and a.book_no = c.no";
 			pstmt = connection.prepareStatement(sql);
 
 			// 4. Parameter Mapping
@@ -160,7 +165,7 @@ public class OrderDao {
 				vo.setBookNo(rs.getLong(1));
 				vo.setTitle(rs.getString(2));
 				vo.setCount(rs.getInt(3));
-				vo.setTotalPrice(rs.getInt(4));
+				vo.setPrice(rs.getInt(4));
 
 				result.add(vo);
 			}

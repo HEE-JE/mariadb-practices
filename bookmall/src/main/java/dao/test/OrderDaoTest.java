@@ -1,5 +1,6 @@
 package dao.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.OrderDao;
@@ -10,7 +11,6 @@ public class OrderDaoTest {
 
 	public static void main(String[] args) {
 		testInsertOrder();
-		testInsertOrderBook();
 		testFindOrder();
 		testFindOrderBook();
 	}
@@ -18,26 +18,26 @@ public class OrderDaoTest {
 	private static void testInsertOrder() {
 		OrderDao dao = new OrderDao();
 		OrderVo vo = new OrderVo();
+		OrderBookVo odvo = new OrderBookVo();
+		List<OrderBookVo> list = new ArrayList<OrderBookVo>();
 
-		vo.setPrice(69000);
 		vo.setReceive("센텀시티");
 		vo.setMemberNo(1L);
-		dao.insertOrder(vo);
-	}
 
-	private static void testInsertOrderBook() {
-		OrderDao dao = new OrderDao();
-		OrderBookVo vo = new OrderBookVo();
+		odvo.setOrderNo(1L);
+		odvo.setBookNo(1L);
+		odvo.setPrice(54000);
+		odvo.setCount(2);
+		list.add(odvo);
+		odvo = new OrderBookVo();
 
-		vo.setOrderNo(1L);
-		vo.setBookNo(1L);
-		vo.setCount(2);
-		dao.insertOrderBook(vo);
+		odvo.setOrderNo(1L);
+		odvo.setBookNo(3L);
+		odvo.setPrice(10000);
+		odvo.setCount(1);
+		list.add(odvo);
 
-		vo.setOrderNo(1L);
-		vo.setBookNo(3L);
-		vo.setCount(1);
-		dao.insertOrderBook(vo);
+		dao.insertOrder(vo, list);
 	}
 
 	private static void testFindOrder() {
